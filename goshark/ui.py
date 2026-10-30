@@ -587,12 +587,13 @@ class MainWindow(QMainWindow):
     def _packet_selected(self, current: QModelIndex, previous: QModelIndex) -> None:
         if not current.isValid():
             self.follow_action.setEnabled(False)
+            self.details.heading.setText("Packet details")
             return
         packet_number = self.model.packet_number(current.row())
         if packet_number == 0:
             return
         row = self.model.packet_row(current.row())
-        self.follow_action.setEnabled(bool(self._current_path) and row.get("protocol") == "TCP")
+        protocol = row.get("protocol", "").upper(); self.follow_action.setEnabled(bool(self._current_path) and protocol == "TCP")
         self._selection_generation += 1
         generation = self._selection_generation
         self._byte_data = bytearray()
