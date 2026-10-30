@@ -22,7 +22,7 @@ jobs:
       - name: Install native dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libpcap-dev libxkbcommon0 xkb-data
+          sudo apt-get install --yes libpcap-dev libxkbcommon0 xkb-data libegl1 libgl1
       - name: Test and build Go engine
         run: |
           go test ./...
