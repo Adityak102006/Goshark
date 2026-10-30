@@ -2,9 +2,44 @@
 
 A native Qt Widgets packet analyzer with a Go capture engine. The desktop client uses PySide6; it does not embed a browser or WebView. The interface follows the approved matte-black native desktop design.
 
-## Build and run
+## Installation
 
-Supported platform for now: Linux. Requirements: Go 1.27.3 or newer, Python 3.10 through 3.15, PySide6 6.12.0, and libpcap development/runtime files for live capture. Live capture may require elevated capture permissions. Windows and macOS are not currently supported or verified.
+Supported platform for now: Linux (Ubuntu/Debian, Fedora, Arch Linux, or WSL2 on Windows). Requirements: Go 1.27.3 or newer, Python 3.10 through 3.15, PySide6 6.12.0, and libpcap development/runtime files for live capture.
+
+### Option 1: Automated Install (Recommended for Beginners)
+
+An automated installer is provided that handles system libraries (`libpcap`, Qt/X11 runtime packages), creates an isolated Python virtual environment, compiles the Go engine and CLI tools, and configures live capture capabilities (`setcap`):
+
+```sh
+chmod +x install.sh
+./install.sh
+```
+
+**Options for `install.sh`:**
+- `./install.sh -y` — Non-interactive mode (assumes yes to prompts).
+- `./install.sh --no-system-deps` — Skip running `apt`/`dnf`/`pacman`/`zypper` package installation (if already installed or running without root).
+- `./install.sh --no-setcap` — Skip granting `cap_net_raw` packet capture capabilities.
+- `./install.sh --no-desktop` — Skip creating the desktop launcher menu icon.
+
+Once installed, launch **goshark** with the simple runner:
+
+```sh
+# Start the graphical application:
+./run.sh
+
+# Open a capture file directly:
+./run.sh testdata/http.pcap
+
+# Or run from the virtual environment:
+source .venv/bin/activate
+goshark testdata/http.pcap
+```
+
+---
+
+### Option 2: Manual Build and Run
+
+If you prefer to configure your environment manually:
 
 ```sh
 mkdir -p bin
