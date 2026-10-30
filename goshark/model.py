@@ -104,7 +104,7 @@ class PacketTableModel(QAbstractTableModel):
                 line = self._file.readline()
                 if not line:
                     break
-                loaded.append(json.loads(line))
+                loaded.append(json.loads(line.decode("utf-8")))
             records = tuple(loaded)
             self._cache[page] = records
             while len(self._cache) > self._cache_limit:
