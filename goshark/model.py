@@ -73,6 +73,21 @@ class PacketTableModel(QAbstractTableModel):
             self.endInsertRows()
         self._file.flush()
         self._cache.clear()
+        # trim to avoid unbounded growth
+        MAX_ROWS = 200000
+        if len(self._offsets) > MAX_ROWS:
+            keep = self._offsets[-MAX_ROWS:]
+            new_file = tempfile.TemporaryFile(mode='w+b')
+            new_offsets = array.array('Q')
+            for off in keep:
+                self._file.seek(off)
+                line = self._file.readline()
+                new_offsets.append(new_file.tell())
+                new_file.write(line)
+            self._file.close()
+            self._file = new_file
+            self._offsets = new_offsets
+            self._cache.clear()
 
     def clear(self) -> None:
         self.beginResetModel()
